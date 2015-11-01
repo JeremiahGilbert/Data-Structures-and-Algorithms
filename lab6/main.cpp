@@ -58,7 +58,7 @@ std::string lcs(std::string x, std::string y) {
 }
 
 void randomizeString(std::string& const string) {
-	for (auto i = string.begin(); i != string.end(); ++i) {
+	for (auto& i = string.begin(); i != string.end(); ++i) {
 		(*i) = alpahbetDistribution(rng) + 'A';
 	}
 }
