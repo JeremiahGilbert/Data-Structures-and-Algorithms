@@ -1,7 +1,10 @@
 #include <algorithm>
 #include <iostream>
 #include <random>
+#include <thread>
 #include <vector>
+
+//#define MULTITHREAD
 
 void mergesort(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 void merge(std::vector<int>::iterator begin, std::vector<int>::iterator split, std::vector<int>::iterator end);
@@ -10,6 +13,7 @@ static std::uniform_int_distribution<int> intDistribution(0, 1000);
 static std::mt19937 rng;
 
 static int comparisons = 0;
+static int threads = 0;
 
 int main() {
 	for (int i = 5000; i <= 100000; i += 5000) {
@@ -26,8 +30,22 @@ void mergesort(std::vector<int>::iterator begin, std::vector<int>::iterator end)
 	int n = std::distance(begin, end);
 	if (n > 1) {
 		std::vector<int>::iterator split = begin + n / 2;
+#ifdef MULTITHREAD
+		if (std::thread::hardware_concurrency() > threads + 2) {
+			threads += 2;
+			std::thread a(mergesort, begin, split);
+			std::thread b(mergesort, split, end);
+			a.join();
+			b.join();
+			threads -= 2;
+		} else {
+			mergesort(begin, split);
+			mergesort(split, end);
+		}
+#else
 		mergesort(begin, split);
 		mergesort(split, end);
+#endif
 		merge(begin, split, end);
 	}
 }
