@@ -4,7 +4,7 @@
 #include <thread>
 #include <vector>
 
-//#define MULTITHREAD
+#define MULTITHREAD
 
 void mergesort(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 void merge(std::vector<int>::iterator begin, std::vector<int>::iterator split, std::vector<int>::iterator end);
